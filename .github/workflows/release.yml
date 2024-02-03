@@ -1,0 +1,46 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Semantic Release
+        uses: cycjimmy/semantic-release-action@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Vérifiez si une release a été créée avant d'exécuter les étapes suivantes
+      - name: Check if Release Created
+        id: release-check
+        run: |
+          echo "RELEASE_CREATED=${{ github.event_name == 'release' }}" >> $GITHUB_ENV
+
+      - name: Extract Release Data
+        id: release-data
+        run: |
+          if [[ "${{ env.RELEASE_CREATED }}" == "true" ]]; then
+            release_id=$(jq -r .release_id ${{ steps.semantic-release.outputs.release-file }})
+            release_title=$(jq -r .release_title ${{ steps.semantic-release.outputs.release-file }})
+            release_description=$(jq -r .release_description ${{ steps.semantic-release.outputs.release-file }})
+            echo "RELEASE_ID=$release_id" >> $GITHUB_ENV
+            echo "RELEASE_TITLE=$release_title" >> $GITHUB_ENV
+            echo "RELEASE_DESCRIPTION=$release_description" >> $GITHUB_ENV
+          fi
+
+      # - name: Send Email
+      #   if: env.RELEASE_CREATED == 'true'
+      #   uses: dawidd6/action-send-mail@v3
+      #   with:
+      #     from: robots@opkod.io
+      #     to: "ayoub.hidri@gmail.com"
+      #     server_address: ${{ secrets.SMTP_SERVER }}
+      #     server_port: 587
+      #     username: ${{ secrets.SMTP_USERNAME }}
+      #     password: ${{ secrets.SMTP_PASSWORD }}
+      #     subject: "ASTONMEDICAL - Nouvelle version disponible - v${{ env.RELEASE_TITLE }}"
+      #     body: ${{ env.RELEASE_DESCRIPTION }}

@@ -1,0 +1,22 @@
+version: 2
+updates:
+  # Enable version updates for npm
+  - package-ecosystem: 'npm'
+    # Directory where package.json is located
+    directory: '/'
+    # Check the npm registry for updates every day (weekdays)
+    schedule:
+      interval: 'daily'
+      # Check for updates only from Monday to Friday
+      day: 'monday'
+      # Time in the UTC timezone
+      time: '02:00'
+    # Limit the number of open pull requests
+    open-pull-requests-limit: 10
+    # Versioning strategy
+    versioning-strategy: increase
+    labels:
+      - 'dependencies'
+    commit-message:
+      prefix: 'chore'
+      include: 'scope'
