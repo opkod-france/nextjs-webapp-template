@@ -15,7 +15,7 @@
     "@emotion/styled": "^11.11.0",
     "@mui/lab": "^5.0.0-alpha.163",
     "@mui/material-nextjs": "^5.15.7",
-    "@mui/x-data-grid": "^6.19.3",
+    "@mui/x-data-grid": "^6.19.6",
     "@mui/x-data-grid-pro": "^6.19.3",
     "@mui/x-date-pickers-pro": "^6.19.3",
     "@mui/x-license-pro": "^6.10.2",
